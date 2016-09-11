@@ -84,4 +84,5 @@ if __name__ == '__main__':
     tree.postorder(base_node=root)
     print('========')
     td = tree.depth(base_node=root)
-    print(td)
+    print('max depth of the tree from "{tree}" is {depth}'.format(tree=root.data,depth=td))
+    print('========')
