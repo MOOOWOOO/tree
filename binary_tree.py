@@ -57,24 +57,63 @@ class BinaryTree(object):
             else:
                 return right_depth + 1
 
+    def width(self, base_node, layer=1):
+        layer_width = {layer: 0}
+        if base_node is None:
+            pass
+        else:
+            layer_width[layer] += 1
+            left_width = self.width(base_node=base_node.left_child, layer=layer + 1)
+            right_width = self.width(base_node=base_node.right_child, layer=layer + 1)
+
+            for k in left_width:
+                if k in layer_width:
+                    pass
+                else:
+                    if left_width[k] == 0:
+                        # remove totally empty layer
+                        continue
+                    else:
+                        layer_width[k] = 0
+                layer_width[k] += left_width[k]
+
+            for k in right_width:
+                if k in layer_width:
+                    pass
+                else:
+                    if right_width[k] == 0:
+                        # remove totally empty layer
+                        continue
+                    else:
+                        layer_width[k] = 0
+                layer_width[k] += right_width[k]
+
+        return layer_width
+
 
 '''
-        root
-         /\
-        5  4
-       /\  /\
-      2 3  1 None
-      | |  |
-      None None
+0           root
+          /     \
+1        5       8
+        /\     /  \
+2      2 3    7    6
+       | |    |   / \
+3      None None 0   4
+                 |  /\
+4             None  1 None
 '''
 
 if __name__ == '__main__':
+    node0 = BinaryNode(data=0)
     node1 = BinaryNode(data=1)
     node2 = BinaryNode(data=2)
     node3 = BinaryNode(data=3)
     node4 = BinaryNode(data=4, left_child=node1)
     node5 = BinaryNode(data=5, left_child=node2, right_child=node3)
-    root = BinaryNode(data='root', left_child=node5, right_child=node4)
+    node6 = BinaryNode(data=6, left_child=node0, right_child=node4)
+    node7 = BinaryNode(data=7)
+    node8 = BinaryNode(data=8, left_child=node7, right_child=node6)
+    root = BinaryNode(data='root', left_child=node5, right_child=node8)
 
     tree = BinaryTree(root)
     tree.preorder(base_node=root)
@@ -84,5 +123,7 @@ if __name__ == '__main__':
     tree.postorder(base_node=root)
     print('========')
     td = tree.depth(base_node=root)
-    print('max depth of the tree from "{tree}" is {depth}'.format(tree=root.data,depth=td))
+    print('max depth of the tree from "{tree}" is {depth}'.format(tree=root.data, depth=td))
     print('========')
+    tw = tree.width(base_node=root)
+    print('each layer\'s width of the tree from "{tree}" is {width}'.format(tree=root.data, width=tw))
