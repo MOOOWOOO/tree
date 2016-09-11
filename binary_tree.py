@@ -1,5 +1,4 @@
 # coding: utf-8
-from copy import deepcopy
 
 __author__ = 'Jux.Liu'
 
@@ -9,15 +8,6 @@ class BinaryNode(object):
         self.data = data
         self.left_child = left_child
         self.right_child = right_child
-
-    def insert_left(self, node):
-        if self.left_child is None:
-            self.left_child = node
-        else:
-            left_tree = deepcopy(self.left_child)
-            self.left_child = node
-            node.left_child = left_tree
-
 
 
 class BinaryTree(object):
@@ -55,6 +45,18 @@ class BinaryTree(object):
         self.postorder(base_node=base_node.right_child)
         print(base_node.data)
 
+    def depth(self, base_node):
+        if base_node is None:
+            return 0
+        else:
+            left_depth = self.depth(base_node=base_node.left_child)
+            right_depth = self.depth(base_node=base_node.right_child)
+
+            if left_depth >= right_depth:
+                return left_depth + 1
+            else:
+                return right_depth + 1
+
 
 '''
         root
@@ -80,3 +82,6 @@ if __name__ == '__main__':
     tree.inorder(base_node=root)
     print('========')
     tree.postorder(base_node=root)
+    print('========')
+    td = tree.depth(base_node=root)
+    print(td)
