@@ -10,19 +10,31 @@ class BinaryNode(object):
         self.left_child = left_child
         self.right_child = right_child
 
+    def __repr__(self):
+        return str(self.data)
+
+    def __eq__(self, other):
+        if other is None:
+            return False
+        else:
+            return self.data == other.data
+
 
 class BinaryTree(object):
-    def __init__(self, node):
-        self.node = node
+    def __init__(self, node=BinaryNode()):
+        if isinstance(node, BinaryNode):
+            self.root = node
+        else:
+            self.root = BinaryNode(data=node)
 
     @property
     def is_empty(self):
-        if self.node.data is None:
+        if self.root is None:
             return True
         else:
             return False
 
-    def preorder(self, base_node):
+    def preorder(self, base_node=None):
         # root - left - right
         if base_node is None:
             return
@@ -30,7 +42,7 @@ class BinaryTree(object):
         self.preorder(base_node=base_node.left_child)
         self.preorder(base_node=base_node.right_child)
 
-    def inorder(self, base_node):
+    def inorder(self, base_node=None):
         # left - root - right
         if base_node is None:
             return
@@ -38,7 +50,7 @@ class BinaryTree(object):
         print(base_node.data)
         self.inorder(base_node=base_node.right_child)
 
-    def postorder(self, base_node):
+    def postorder(self, base_node=None):
         # left - right - root
         if base_node is None:
             return
@@ -46,7 +58,7 @@ class BinaryTree(object):
         self.postorder(base_node=base_node.right_child)
         print(base_node.data)
 
-    def layorder(self, base_node):
+    def layorder(self, base_node=None):
         if base_node is None:
             return
         node_queue = [base_node]
@@ -108,6 +120,43 @@ class BinaryTree(object):
 
         return layer_width
 
+    def append_node(self, base_node, new_node):
+        if self.is_empty:
+            self.root = new_node
+            return root
+        else:
+            node_queue = [base_node]
+            while node_queue:
+                node = node_queue.pop(0)
+                if node.left_child is None:
+                    node.left_child = new_node
+                    return node
+                elif node.right_child is None:
+                    node.right_child = new_node
+                    return node
+                else:
+                    node_queue.append(node.left_child)
+                    node_queue.append(node.right_child)
+
+    def append_tree(self, base_node, subtree):
+        return self.append_node(base_node=base_node, new_node=subtree.root)
+
+    def drop_node(self, base_node, node):
+        if self.is_empty or base_node is None:
+            pass
+        else:
+            if base_node.left_child == node:
+                base_node.left_child = None
+                return True
+            elif base_node.right_child == node:
+                base_node.right_child = None
+                return True
+
+        return False
+
+    def drop_subtree(self, base_node, subtree):
+        return self.drop_node(base_node=base_node, node=subtree.root)
+
 
 '''
 0           root
@@ -147,3 +196,47 @@ if __name__ == '__main__':
     print('each layer\'s width of the tree from "{tree}" is {width}'.format(tree=root.data, width=tw))
     print('========')
     tree.layorder(base_node=root)
+    print('========')
+    p_node = tree.append_node(base_node=node7, new_node=BinaryNode(99))
+    tree.inorder(base_node=root)
+    print('parent', p_node)
+    print('========')
+    p_node = tree.append_node(base_node=node7, new_node=BinaryNode(999))
+    tree.inorder(base_node=root)
+    print('parent', p_node)
+    print('========')
+    node10 = BinaryNode(data=10)
+    node11 = BinaryNode(data=11)
+    node12 = BinaryNode(data=12)
+    node13 = BinaryNode(data=13)
+    node14 = BinaryNode(data=14, left_child=node11)
+    node15 = BinaryNode(data=15, left_child=node12, right_child=node13)
+    node16 = BinaryNode(data=16, left_child=node10, right_child=node14)
+    node17 = BinaryNode(data=17)
+    node18 = BinaryNode(data=18, left_child=node17, right_child=node16)
+    new_root = BinaryNode(data='new_root', left_child=node15, right_child=node18)
+    new_tree = BinaryTree(new_root)
+    p_node = tree.append_tree(base_node=node8, subtree=new_tree)
+    tree.inorder(base_node=root)
+    print('parent', p_node)
+    print('========')
+    r = tree.drop_node(base_node=node7, node=BinaryNode(999))
+    tree.inorder(base_node=root)
+    print('drop node result', r)
+    print('========')
+    r = tree.drop_subtree(base_node=node6, subtree=new_tree)
+    tree.inorder(base_node=root)
+    print('drop tree result1', r)
+    print('========')
+    r = tree.drop_subtree(base_node=BinaryNode(99), subtree=new_tree)
+    tree.inorder(base_node=root)
+    print('drop tree result2', r)
+    print('========')
+    r = tree.drop_subtree(base_node=p_node, subtree=new_tree)
+    tree.inorder(base_node=root)
+    print('drop tree result3', r)
+    print('beacuse BinaryNode(99) == p_node, but BinaryNode(99) is not p_node')
+    print('========')
+    bt = BinaryTree()
+    print(bt.root.data)
+    print(bt.is_empty)
