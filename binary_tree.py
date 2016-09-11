@@ -1,4 +1,5 @@
 # coding: utf-8
+from copy import deepcopy
 
 __author__ = 'Jux.Liu'
 
@@ -44,6 +45,23 @@ class BinaryTree(object):
         self.postorder(base_node=base_node.left_child)
         self.postorder(base_node=base_node.right_child)
         print(base_node.data)
+
+    def layorder(self, base_node):
+        if base_node is None:
+            return
+        node_queue = [base_node]
+        while node_queue:
+            node = node_queue.pop(0)
+            print(node.data)
+            if node.left_child is None:
+                pass
+            else:
+                node_queue.append(node.left_child)
+            if node.right_child is None:
+                pass
+            else:
+                node_queue.append(node.right_child)
+
 
     def depth(self, base_node):
         if base_node is None:
@@ -127,3 +145,5 @@ if __name__ == '__main__':
     print('========')
     tw = tree.width(base_node=root)
     print('each layer\'s width of the tree from "{tree}" is {width}'.format(tree=root.data, width=tw))
+    print('========')
+    tree.layorder(base_node=root)
