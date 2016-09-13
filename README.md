@@ -15,4 +15,5 @@
 
 ## 二叉搜索树 binary search tree
 
-to continue
+- ~~插入节点~~
+- 删除节点

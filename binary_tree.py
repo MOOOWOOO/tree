@@ -14,10 +14,26 @@ class BinaryNode(object):
         return str(self.data)
 
     def __eq__(self, other):
-        if other is None:
+        if other is None or self is None:
             return False
         else:
             return self.data == other.data
+
+    def __lt__(self, other):
+        if self is None:
+            return False
+        elif other is None:
+            return True
+        else:
+            return self.data < other.data
+
+    def __gt__(self, other):
+        if self is None:
+            return False
+        elif other is None:
+            return True
+        else:
+            return self.data > other.data
 
 
 class BinaryTree(object):
