@@ -8,6 +8,10 @@ class BinaryNode(object):
         self.data = data
         self.left_child = left_child
         self.right_child = right_child
+        if left_child:
+            self.left_child.parent = self
+        if right_child:
+            self.right_child.parent = self
         self.parent = parent
 
     def __repr__(self):
