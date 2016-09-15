@@ -10,11 +10,11 @@ class BinaryTree(BinaryNode):
         if isinstance(node, BinaryNode):
             self.root = node
         else:
-            self.root = super().__init__(data=node)
+            self.root = super().__init__()
 
     @property
     def is_empty(self):
-        if self.root is None:
+        if self.root.data is None and not self.root.has_child:
             return True
         else:
             return False
@@ -114,9 +114,11 @@ class BinaryTree(BinaryNode):
                 node = node_queue.pop(0)
                 if node.left_child is None:
                     node.left_child = new_node
+                    new_node.parent = node
                     return node
                 elif node.right_child is None:
                     node.right_child = new_node
+                    new_node.parent = node
                     return node
                 else:
                     node_queue.append(node.left_child)
